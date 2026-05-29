@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '@/theme';
 import { AvatarStage } from '@/components/AvatarStage';
+import { CaptionOverlay } from '@/components/CaptionOverlay';
 import { MessageBar } from '@/components/MessageBar';
 import { StatusPill } from '@/components/StatusPill';
 
@@ -32,6 +33,7 @@ export function AvatarScreen({ onLeave }: Props) {
           style={styles.bottom}
           pointerEvents="box-none"
         >
+          <CaptionOverlay />
           <MessageBar />
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -53,5 +55,6 @@ const styles = StyleSheet.create({
   bottom: {
     paddingHorizontal: theme.spacing(3),
     paddingBottom: theme.spacing(2),
+    gap: theme.spacing(2),
   },
 });
