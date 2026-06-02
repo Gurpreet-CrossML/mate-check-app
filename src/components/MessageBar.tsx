@@ -3,13 +3,14 @@ import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useLocalParticipant, useRoomContext } from '@livekit/react-native';
 
 import { theme } from '@/theme';
+import { useAvatarAudio } from '@/components/AvatarAudioContext';
 
 /** Topic the agent listens on for typed messages (LiveKit chat convention). */
 const CHAT_TOPIC = 'lk.chat';
@@ -22,6 +23,7 @@ const CHAT_TOPIC = 'lk.chat';
 export function MessageBar() {
   const room = useRoomContext();
   const { localParticipant, isMicrophoneEnabled } = useLocalParticipant();
+  const { muted: avatarMuted, toggleMuted: toggleAvatarMuted } = useAvatarAudio();
 
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
@@ -84,8 +86,26 @@ export function MessageBar() {
         {sending ? (
           <ActivityIndicator color={theme.colors.text} size="small" />
         ) : (
-          <Text style={styles.iconGlyph}>↑</Text>
+          <Feather name="arrow-up" size={20} color={theme.colors.text} />
         )}
+      </Pressable>
+
+      {/* Avatar audio (speaker) mute toggle — silences the avatar's voice while
+          its lip-sync video keeps playing. */}
+      <Pressable
+        onPress={toggleAvatarMuted}
+        style={({ pressed }) => [
+          styles.iconButton,
+          avatarMuted ? styles.speakerMuted : styles.speakerOn,
+          pressed && styles.pressed,
+        ]}
+        accessibilityLabel={avatarMuted ? 'Unmute avatar audio' : 'Mute avatar audio'}
+      >
+        <Feather
+          name={avatarMuted ? 'volume-x' : 'volume-2'}
+          size={20}
+          color={theme.colors.text}
+        />
       </Pressable>
 
       {/* Mic toggle */}
@@ -102,7 +122,11 @@ export function MessageBar() {
         {micBusy ? (
           <ActivityIndicator color={theme.colors.text} size="small" />
         ) : (
-          <Text style={styles.iconGlyph}>{isMicrophoneEnabled ? '🎙' : '🔇'}</Text>
+          <Feather
+            name={isMicrophoneEnabled ? 'mic' : 'mic-off'}
+            size={20}
+            color={theme.colors.text}
+          />
         )}
       </Pressable>
     </View>
@@ -139,11 +163,8 @@ const styles = StyleSheet.create({
   sendButton: { backgroundColor: theme.colors.accent },
   micOn: { backgroundColor: theme.colors.danger },
   micOff: { backgroundColor: theme.colors.surfaceStrong },
+  speakerOn: { backgroundColor: theme.colors.surfaceStrong },
+  speakerMuted: { backgroundColor: theme.colors.danger },
   pressed: { opacity: 0.7 },
   disabled: { opacity: 0.4 },
-  iconGlyph: {
-    color: theme.colors.text,
-    fontSize: 18,
-    fontWeight: '700',
-  },
 });

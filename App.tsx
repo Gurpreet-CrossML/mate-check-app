@@ -7,6 +7,7 @@ import { AudioSession, LiveKitRoom } from '@livekit/react-native';
 import { fetchConnectionDetails, type ConnectionDetails } from '@/lib/api';
 import { theme } from '@/theme';
 import { AvatarScreen } from '@/screens/AvatarScreen';
+import { AvatarAudioProvider } from '@/components/AvatarAudioContext';
 import { ConnectGate } from '@/components/ConnectGate';
 
 type Status = 'idle' | 'connecting' | 'connected' | 'error';
@@ -59,7 +60,9 @@ export default function App() {
               setStatus('error');
             }}
           >
-            <AvatarScreen onLeave={disconnect} />
+            <AvatarAudioProvider>
+              <AvatarScreen onLeave={disconnect} />
+            </AvatarAudioProvider>
           </LiveKitRoom>
         ) : (
           <ConnectGate status={status} error={error} onConnect={connect} />

@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useConnectionState } from '@livekit/react-native';
 import { ConnectionState } from 'livekit-client';
 
@@ -33,7 +34,7 @@ export function StatusPill({ onLeave }: Props) {
         style={({ pressed }) => [styles.leave, pressed && styles.pressed]}
         accessibilityLabel="Leave conversation"
       >
-        <Text style={styles.leaveText}>✕</Text>
+        <Feather name="x" size={18} color={theme.colors.text} />
       </Pressable>
     </View>
   );
@@ -75,9 +76,4 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
   },
   pressed: { opacity: 0.6 },
-  leaveText: {
-    color: theme.colors.text,
-    fontSize: 16,
-    fontWeight: '700',
-  },
 });

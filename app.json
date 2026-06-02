@@ -16,7 +16,8 @@
         "UIBackgroundModes": [
           "audio",
           "voip"
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       },
       "bitcode": false
     },
